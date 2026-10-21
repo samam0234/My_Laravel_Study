@@ -10,7 +10,7 @@ class PostController extends Controller
     public function index()
     {
         return view('posts.index', [
-            'posts' => Post::query()->latest()->get(),
+            'posts' => Post::query()->withCount('comments')->latest()->get(),
         ]);
     }
 
@@ -38,6 +38,8 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
+        $post->load(['comments' => fn ($query) => $query->oldest()]);
+
         return view('posts.show', ['post' => $post]);
     }
 

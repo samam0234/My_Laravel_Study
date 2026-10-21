@@ -13,7 +13,7 @@
             @forelse ($posts as $post)
                 <article class="card">
                     <a class="title" href="{{ route('posts.show', $post) }}">{{ $post->title }}</a>
-                    <p class="meta">{{ $post->created_at->timezone('Asia/Seoul')->format('Y-m-d H:i') }}</p>
+                    <p class="meta">{{ $post->created_at->timezone('Asia/Seoul')->format('Y-m-d H:i') }} · 댓글 {{ $post->comments_count }}</p>
                 </article>
             @empty
                 <p>아직 글이 없습니다.</p>
