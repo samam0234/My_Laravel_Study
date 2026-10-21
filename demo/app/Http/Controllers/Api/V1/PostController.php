@@ -24,11 +24,51 @@ class PostController extends Controller
         return PostResource::collection($posts);
     }
 
+    public function store(Request $request)
+    {
+        $data = $this->validated($request);
+        $post = $request->user()->posts()->create($data);
+
+        return (new PostResource($post->load('user')))
+            ->response()
+            ->setStatusCode(201);
+    }
+
     public function show(Post $post)
     {
         $this->authorize('view', $post);
         $post->load('user');
 
         return new PostResource($post);
+    }
+
+    public function update(Request $request, Post $post)
+    {
+        $this->authorize('update', $post);
+        $post->update($this->validated($request));
+
+        return new PostResource($post->load('user'));
+    }
+
+    public function destroy(Post $post)
+    {
+        $this->authorize('delete', $post);
+        $post->delete();
+
+        return response()->noContent();
+    }
+
+    /**
+     * @return array{title: string, body: string}
+     */
+    private function validated(Request $request): array
+    {
+        return $request->validate([
+            'title' => ['required', 'string', 'max:120'],
+            'body' => ['required', 'string'],
+        ], [
+            'title.required' => '제목을 입력해 주세요.',
+            'body.required' => '내용을 입력해 주세요.',
+        ]);
     }
 }
