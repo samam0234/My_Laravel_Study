@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -22,11 +23,15 @@ class CommentTest extends TestCase
 
     public function test_comment_can_be_stored_and_deleted_on_its_post(): void
     {
-        $post = Post::create(['title' => '글', 'body' => '본문']);
+        $user = User::factory()->create();
+        $post = $user->posts()->create(['title' => '글', 'body' => '본문']);
         $other = Post::create(['title' => '다른 글', 'body' => '본문']);
-        $foreign = $other->comments()->create(['body' => '다른 글의 댓글']);
+        $foreign = $other->comments()->make(['body' => '다른 글의 댓글']);
+        $foreign->user()->associate($user);
+        $foreign->save();
 
-        $this->post("/posts/{$post->id}/comments", ['body' => '화면에 다는 댓글'])
+        $this->actingAs($user)
+            ->post("/posts/{$post->id}/comments", ['body' => '화면에 다는 댓글'])
             ->assertRedirect("/posts/{$post->id}");
 
         $this->get("/posts/{$post->id}")
@@ -35,11 +40,13 @@ class CommentTest extends TestCase
 
         $this->get('/posts')->assertSee('댓글 1');
 
-        $this->delete("/posts/{$post->id}/comments/{$foreign->id}")
+        $this->actingAs($user)
+            ->delete("/posts/{$post->id}/comments/{$foreign->id}")
             ->assertNotFound();
 
         $comment = $post->comments()->first();
-        $this->delete("/posts/{$post->id}/comments/{$comment->id}")
+        $this->actingAs($user)
+            ->delete("/posts/{$post->id}/comments/{$comment->id}")
             ->assertRedirect("/posts/{$post->id}");
 
         $this->assertDatabaseMissing('comments', ['id' => $comment->id]);

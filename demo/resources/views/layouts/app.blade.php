@@ -11,6 +11,16 @@
         <a class="brand" href="{{ route('home') }}">{{ config('app.name') }}</a>
         <nav class="links">
             <a href="{{ route('posts.index') }}">게시판</a>
+            @auth
+                <span>{{ auth()->user()->name }}</span>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="quiet" type="submit">로그아웃</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}">로그인</a>
+                <a href="{{ route('register') }}">회원가입</a>
+            @endauth
             @yield('nav')
         </nav>
     </header>

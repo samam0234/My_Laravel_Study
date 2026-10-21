@@ -16,7 +16,9 @@ class CommentController extends Controller
             'body.required' => '댓글을 입력해 주세요.',
         ]);
 
-        $post->comments()->create($data);
+        $comment = $post->comments()->make($data);
+        $comment->user()->associate($request->user());
+        $comment->save();
 
         return redirect()
             ->route('posts.show', $post)
@@ -25,6 +27,7 @@ class CommentController extends Controller
 
     public function destroy(Post $post, Comment $comment)
     {
+        $this->authorize('delete', $comment);
         $comment->delete();
 
         return redirect()

@@ -10,7 +10,7 @@ class PostController extends Controller
     public function index()
     {
         return view('posts.index', [
-            'posts' => Post::query()->withCount('comments')->latest()->get(),
+            'posts' => Post::query()->with('user')->withCount('comments')->latest()->get(),
         ]);
     }
 
@@ -29,7 +29,7 @@ class PostController extends Controller
             'body.required' => '내용을 입력해 주세요.',
         ]);
 
-        $post = Post::create($data);
+        $post = $request->user()->posts()->create($data);
 
         return redirect()
             ->route('posts.show', $post)
@@ -38,18 +38,22 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        $post->load(['comments' => fn ($query) => $query->oldest()]);
+        $post->load(['user', 'comments' => fn ($query) => $query->with('user')->oldest()]);
 
         return view('posts.show', ['post' => $post]);
     }
 
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
+
         return view('posts.edit', ['post' => $post]);
     }
 
     public function update(Request $request, Post $post)
     {
+        $this->authorize('update', $post);
+
         $data = $request->validate([
             'title' => ['required', 'string', 'max:120'],
             'body' => ['required', 'string'],
@@ -67,6 +71,7 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
+        $this->authorize('delete', $post);
         $post->delete();
 
         return redirect()
