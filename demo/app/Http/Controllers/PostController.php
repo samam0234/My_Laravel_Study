@@ -7,11 +7,19 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('posts.index', [
-            'posts' => Post::query()->with('user')->withCount('comments')->latest()->get(),
-        ]);
+        $this->authorize('viewAny', Post::class);
+
+        $posts = Post::query()
+            ->with('user')
+            ->withCount('comments')
+            ->search($request->query('q'))
+            ->latest('id')
+            ->paginate(5)
+            ->withQueryString();
+
+        return view('posts.index', ['posts' => $posts]);
     }
 
     public function create()
@@ -38,6 +46,7 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
+        $this->authorize('view', $post);
         $post->load(['user', 'comments' => fn ($query) => $query->with('user')->oldest()]);
 
         return view('posts.show', ['post' => $post]);
