@@ -10,6 +10,7 @@
     <header class="top">
         <a class="brand" href="{{ route('home') }}">{{ config('app.name') }}</a>
         <nav class="links">
+            <a href="{{ route('posts.index') }}">게시판</a>
             @yield('nav')
         </nav>
     </header>
