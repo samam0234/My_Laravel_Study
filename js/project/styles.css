@@ -1,0 +1,20 @@
+:root {
+  color: #2a2116;
+  background: #f6efe4;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body { margin: 0; }
+main { max-width: 40rem; margin: 0 auto; padding: 1.5rem; }
+.card { background: #fffaf3; border-radius: 1rem; padding: 1.25rem; }
+.eyebrow { color: #8a5a12; font-family: Consolas, monospace; }
+label, form { display: grid; gap: 0.4rem; }
+input, textarea, button { font: inherit; padding: 0.45rem 0.6rem; }
+.row { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.row input { flex: 1; }
+#notes, #tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+article { border-top: 1px solid #eadfce; padding-top: 0.6rem; width: 100%; }
+button.link, button.chip { background: none; border: 1px solid #eadfce; border-radius: 999px; color: #8a5a12; cursor: pointer; }
+button.link { border: 0; padding: 0; font-weight: 700; }
+.muted { color: #6d6258; }
+.error { color: #9d2c2c; }
