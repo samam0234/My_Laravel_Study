@@ -1,0 +1,19 @@
+:root {
+  color: #1e2a24;
+  background: #e7f0ea;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body { margin: 0; }
+main { max-width: 40rem; margin: 0 auto; padding: 1.5rem; }
+.card { background: #fff; border-radius: 1rem; padding: 1.25rem; }
+.eyebrow { color: #1f6b45; font-family: Consolas, monospace; }
+label, form { display: grid; gap: 0.4rem; }
+input, textarea, button { font: inherit; padding: 0.45rem 0.6rem; }
+.row { display: flex; gap: 0.5rem; align-items: center; }
+.row input { flex: 1; }
+#posts { display: grid; gap: 0.6rem; }
+article { border-top: 1px solid #d3e2d8; padding-top: 0.6rem; }
+button.link { background: none; border: 0; padding: 0; color: #1f6b45; font-weight: 700; cursor: pointer; }
+.muted { color: #5c6b62; }
+.error { color: #9d2c2c; }
