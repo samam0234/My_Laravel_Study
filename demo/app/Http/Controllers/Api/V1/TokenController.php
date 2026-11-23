@@ -26,7 +26,7 @@ class TokenController extends Controller
         }
 
         return response()->json([
-            'token' => $user->createToken('api')->plainTextToken,
+            'token' => $user->createToken('api', ['*'], now()->addHour())->plainTextToken,
             'token_type' => 'Bearer',
             'name' => $user->name,
         ]);
