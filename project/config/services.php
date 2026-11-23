@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'github' => ['client_id' => env('GITHUB_CLIENT_ID'), 'client_secret' => env('GITHUB_CLIENT_SECRET'), 'redirect' => env('GITHUB_REDIRECT_URI')],
+    'stripe' => ['secret' => env('STRIPE_SECRET'), 'price' => env('STRIPE_PRICE_ID'), 'webhook_secret' => env('STRIPE_WEBHOOK_SECRET')],
 
     /*
     |--------------------------------------------------------------------------
