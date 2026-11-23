@@ -1,0 +1,74 @@
+name: Deploy
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: production
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: >-
+      vars.DEPLOY_ENABLED == 'true' &&
+      ((github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository))
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+      sha: ${{ steps.image.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - id: image
+        shell: bash
+        run: |
+          echo "image=ghcr.io/${GITHUB_REPOSITORY,,}:$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: project
+          target: app
+          push: true
+          tags: ${{ steps.image.outputs.image }}-app
+          build-args: |
+            VITE_REVERB_APP_KEY=${{ vars.REVERB_PUBLIC_KEY }}
+            VITE_REVERB_HOST=${{ vars.REVERB_PUBLIC_HOST }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: project
+          target: web
+          push: true
+          tags: ${{ steps.image.outputs.image }}-web
+          build-args: |
+            VITE_REVERB_APP_KEY=${{ vars.REVERB_PUBLIC_KEY }}
+            VITE_REVERB_HOST=${{ vars.REVERB_PUBLIC_HOST }}
+  deploy:
+    needs: publish
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy exact image and check health
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          TARGET: ${{ secrets.DEPLOY_TARGET }}
+          IMAGE: ${{ needs.publish.outputs.image }}
+          RELEASE_SHA: ${{ needs.publish.outputs.sha }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          ssh "$TARGET" "cd /srv/laravel-study && git fetch origin main && git checkout --detach '$RELEASE_SHA' && export IMAGE='$IMAGE' && docker compose -f compose.production.yaml pull && docker compose -f compose.production.yaml run --rm app php artisan migrate --force && docker compose -f compose.production.yaml up -d && curl --retry 10 --retry-connrefused --retry-delay 2 --fail http://127.0.0.1:8088/health"

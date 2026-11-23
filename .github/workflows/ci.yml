@@ -1,0 +1,87 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [demo, project]
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, intl, pdo_sqlite, pdo_mysql, pdo_pgsql
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+      - run: composer install --prefer-dist --no-interaction
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: php artisan test --compact
+      - run: composer audit
+      - run: npm audit --omit=dev
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/check_course.py
+  database:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [demo, project]
+        driver: [pgsql, mariadb]
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: study
+          POSTGRES_USER: study
+          POSTGRES_PASSWORD: study-test-password
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U study -d study" --health-interval 5s --health-retries 10
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_DATABASE: study
+          MARIADB_USER: study
+          MARIADB_PASSWORD: study-test-password
+          MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
+        ports: ['3306:3306']
+        options: --health-cmd "healthcheck.sh --connect --innodb_initialized" --health-interval 5s --health-retries 10
+    env:
+      DB_CONNECTION: ${{ matrix.driver }}
+      DB_HOST: 127.0.0.1
+      DB_PORT: ${{ matrix.driver == 'pgsql' && '5432' || '3306' }}
+      DB_DATABASE: study
+      DB_USERNAME: study
+      DB_PASSWORD: study-test-password
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, intl, pdo_pgsql, pdo_mysql
+          coverage: none
+      - run: composer install --prefer-dist --no-interaction
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+      - run: php artisan test --compact
