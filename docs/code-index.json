@@ -1,0 +1,125 @@
+{
+  "study0.md": {
+    "demo/composer.json": "df0bf501cedcb15bba77f73366b2523ef46d10d0242b5f14d62b5278a50ba127",
+    "demo/.env.example": "ba7498c8e42e54df52b74b1ae6230bed6b2042fa8a2c3a21188f53bfde84ad33",
+    ".gitignore": "17ae9482f64a12f9c0dbf7fb2457d4080b7e17f767d3467e0b632df5d4f2ccb3",
+    "demo/vite.config.js": "31eccab4beabc8d5497f230e320e06fbbcd3e7ef1d36fe0340898e614012e35f"
+  },
+  "study1.md": {
+    "demo/app/Http/Controllers/HomeController.php": "41c0f78b46915610362fa9109018ce83f98ca2b29c2eff347dc238fff5195247",
+    "demo/resources/views/home.blade.php": "1ccfca68f201b249581e0e7f21537e51a4ceab79f40b054dad120259a154c73e"
+  },
+  "study2.md": {
+    "demo/app/Http/Controllers/Controller.php": "e5ddafa07059bfc9f8310767b0fc04dd3b8a1f50bcec1fd693b19f5555697825",
+    "demo/app/Http/Controllers/LearningController.php": "45c23a3aa6c09e3834f0f9979585d3a486923c69882177cf607b968697b62982",
+    "demo/resources/views/study/preferences.blade.php": "956a31b965b146e4550be172a993e7afa5442e3e660fcd6ce2b93310c189bdc2"
+  },
+  "study3.md": {
+    "demo/app/Models/Post.php": "206518d97cc8227cc800a067bea6f6778b6620d928551b12bab08b39c79354bb",
+    "demo/app/Http/Controllers/LearningController.php": "45c23a3aa6c09e3834f0f9979585d3a486923c69882177cf607b968697b62982",
+    "demo/resources/js/stores/auth.js": "79273f9ce03910a436408b67737e3205fbf5912723916770c5944b2a2447a57b"
+  },
+  "study4.md": {
+    "demo/routes/web.php": "93ab4b6d2ee1ac9a360b56a5153174ec507b0071690713a0540f871956ea2df8",
+    "demo/routes/api.php": "87c0ca04c2e124d6d707900a7d00338cc7bf070780381611b5d8183b09ec9c37",
+    "demo/bootstrap/app.php": "3cb1ad908bdb075c27a90f9e0f2715a47419a16117600cbad7a04b28d9bcac50"
+  },
+  "study5.md": {
+    "demo/resources/views/posts/_form.blade.php": "f0ab1470683d28f9670bf58bf8e2739ba7f200f1013cdfcd3f0636c6096cc411",
+    "demo/app/Http/Controllers/PostController.php": "c0420e28da031321751ab153ce84a63f7d3144d201876f3783ff367937603f62",
+    "demo/resources/js/App.vue": "1eeaa5d1d7c3eada165251abef4e7b7db3e9a40525f92b234a22c83e8a296631"
+  },
+  "study6.md": {
+    "demo/app/Http/Controllers/Api/ContractController.php": "718e0e3d41e850965ba857e0bc0bdb0b56cb81755048ec599f12a80973a2a9bb",
+    "demo/app/Http/Resources/EntryResource.php": "8989a7a1b1523501875ac63bab935edb13d90912af74b581a0ba647aa171e17b",
+    "demo/app/Http/Controllers/Api/CommentContractController.php": "340d4adb768fea74dad25c0e96ebcc05509fa39284b59a345b5e8df19b71cbec",
+    "demo/database/migrations/2026_11_23_135403_add_tags_to_posts.php": "b188522e984aa1948ceb4be6439d7e7ce50be43321d36261a257b3f30b1cb999"
+  },
+  "study7.md": {
+    "demo/app/Http/Controllers/Api/AuthController.php": "543135d2f40c7569cf1bf545545196d66a8fe80b5b49f0b9db3259d56d323575",
+    "demo/app/Http/Controllers/Auth/SessionController.php": "ebe39f8c472529eb2a11f80ebb5815ed8d96da20a3dd02ea9916f742e80e2383",
+    "demo/app/Models/User.php": "4d4048d20671a6b695f84892dd9ff2a93745f7f591bc386583ad18feab6c9ccf",
+    "demo/app/Policies/PostPolicy.php": "46bfb2e7a1c78194e8f6c409b3582e3d1b34cb37df0732e061bb3f63f65664c7",
+    "demo/config/cors.php": "6d8ba0c5c20d64e3e1da3498aa6effb7de23035bf5468adc44cbf41f2e566fc5"
+  },
+  "study8.md": {
+    "demo/app/Support/TagNames.php": "110e46f81347b79de5e26462f74ae72478efe416a296342d6713441a7b486d67",
+    "demo/resources/views/components/status.blade.php": "1456b7edcf921fea5ab459dc285a849f8d46cd608569a64b8fb48dd50041b064",
+    "demo/config/study.php": "c7aa416a4c963d0ef077f8ffc15d7d7c0290825f35b7e2c1213aa43c47a911fa",
+    "project/docker/production.env.example": "fddc111e04dd2c4e8213a00b7e32d1c91c717c2834fb5e646e365084b3a129d9"
+  },
+  "study9.md": {
+    "demo/tests/Unit/TagNamesTest.php": "005b6cf580177ac9dd1e9f2abaa134e8b7c08b42e89032f6ca756791a7c824ea",
+    "demo/tests/Feature/ContractTest.php": "1bd4756501f791c7c7752a4e556b4c9d6a82be9a82cb61fe0fa14fac16bc9208",
+    "project/tests/Feature/DocumentTest.php": "22c249beeb5ca5e002acbbac4e19f333d63e5a47bae2622a11cf37042dc5d8b3"
+  },
+  "study10.md": {
+    "project/docker/nginx.conf": "130d915c4e0ef7efdec6051bb822fb954ed1ad6b2cfde9c8d7129cc8bbfa677c",
+    "project/docker/production.env.example": "fddc111e04dd2c4e8213a00b7e32d1c91c717c2834fb5e646e365084b3a129d9"
+  },
+  "studyMidpoint.md": {
+    "demo/app/Http/Controllers/Api/ContractController.php": "718e0e3d41e850965ba857e0bc0bdb0b56cb81755048ec599f12a80973a2a9bb",
+    "demo/app/Http/Controllers/Api/CommentContractController.php": "340d4adb768fea74dad25c0e96ebcc05509fa39284b59a345b5e8df19b71cbec",
+    "demo/resources/js/App.vue": "1eeaa5d1d7c3eada165251abef4e7b7db3e9a40525f92b234a22c83e8a296631"
+  },
+  "study11.md": {
+    "compose.yaml": "60f72bffdfdc9d2982b91bcd011b0a9ec8e73b72ca7ebee9b1bbae75241a672d",
+    "tools/use_database.ps1": "173dbc03ad345db305e5ca301df1ce8c988bd9bfefa7ced4f604ccb9c3b216bd",
+    "project/app/Models/Note.php": "d0f7ae488620442fc9bc5aab0f51b385729d081f015a5d2d524b97a5c0cd977f",
+    "examples/mongodb/ArchiveDocument.php": "7562882abb1b2a395c32f6897d082d394a9a164a5d13190801aa1efb02a626f0",
+    "examples/mongodb/run.php": "5d5921d329fc755e0e9185bb648e0296d57fcb99d99e95509c90ce8f9c207bbf"
+  },
+  "study12.md": {
+    "project/resources/js/app.js": "43768eef640281cccabdb398866bbbb1bd26165481ff103723951686005ca5a2",
+    "project/resources/js/stores/auth.js": "79273f9ce03910a436408b67737e3205fbf5912723916770c5944b2a2447a57b",
+    "project/resources/js/App.vue": "c7621beb0d4e2008a290bd050bcfef60ef9960df293cf06124e525a48b6d7a40",
+    "project/resources/views/workspace.blade.php": "23ec40fcd52447c8179a38eebbe8fa03a2fdf2224bb2602c5bea2b1fd3e81f1f"
+  },
+  "study13.md": {
+    "project/app/Http/Controllers/IntegrationController.php": "a2feaeed2825a9da57b8f84d7d2235a474bae748313be5aabd5e165757ce3e76",
+    "project/config/services.php": "ff3d4d3c38bc842bfa4726d15fe34eb8c7360b22d56e34cc9be4b9e23d0bac3b",
+    "project/app/Http/Controllers/Api/DocumentController.php": "4882615f96262f6d8ac7df61726a3af33bc6e124b36bcd953efba07768eddd7b",
+    "project/app/Notifications/DocumentReady.php": "de50a9f92d466c6780e776bc026944d02073e0604264ae5ebcf26ef38f77a472",
+    "project/tests/Feature/IntegrationTest.php": "00b8410a23eaa125e76cfea65e3a8921d882848989066df6b6a689954abea65e"
+  },
+  "study14.md": {
+    "project/app/Http/Resources/EntryResource.php": "4c26eda78633d0c75ab077dc89a827c882b7594ee78519f9a2e02a2a39159364",
+    "project/app/Http/Resources/DocumentResource.php": "ec309d563e54e0b04a9d9b4f224eb3c89db9a8848f15e9a199361c98bfd369d7",
+    "project/bootstrap/app.php": "99e806d5205bc5b96e4ad61f1a51a9b6a2ac7e9a0c064f0581ebe870317dee8d",
+    "project/app/Http/Middleware/RequestContext.php": "5aa6719f43010ec3e1cf2e8c442004901b137b59a8fb73bb7bed4c35545f208b",
+    "project/resources/js/docs.js": "bc7f151f97516ec8990b959cf0e3dc10d9fa3462cf0be92d9e407a1c29394137"
+  },
+  "study15.md": {
+    "project/app/Services/LibraryStats.php": "6d15f603cbee7f05bc6ec230c00a075a5667181e31085a08863cb035c1f77559",
+    "project/app/Jobs/SummarizeDocument.php": "95a6c32173a7aa57b3b74c534b6c07180d0ff3ebfde0b96e2c18e8c2d6f0acac",
+    "project/app/Notifications/DocumentReady.php": "de50a9f92d466c6780e776bc026944d02073e0604264ae5ebcf26ef38f77a472"
+  },
+  "study16.md": {
+    "project/Dockerfile": "826da4e497f6fd4442259196333577312026793dcd98d10f096ab65252e99cd5",
+    "compose.production.yaml": "7279c708fbb9654c179475ddb60ce762d0f2a389b8c7a815e8a6e448ff6131aa",
+    ".github/workflows/ci.yml": "d242758bc4ae60194ff2c47d562de25e6bb3bdd1c67f8ca9fb216f4770795771",
+    ".github/workflows/deploy.yml": "0b3d9f9052a5c8c989a60f005963dd5bb928c249fe10949ae2d99a280f9e4e13",
+    "tools/backup.ps1": "169daca5c420653b71accfccfcd64cb728994815f2021b76d39148e5d474b608"
+  },
+  "study17.md": {
+    "project/resources/js/realtime.js": "6eb35f7a1838c5042732aba298e81608110300d24a736fccf159dd7fecabd13b",
+    "project/routes/channels.php": "08a23a6ab9754da0560f42f1c7f4158b5f991f5846a6d285c0d4098ead3e6f16",
+    "project/app/Notifications/DocumentReady.php": "de50a9f92d466c6780e776bc026944d02073e0604264ae5ebcf26ef38f77a472",
+    "project/config/reverb.php": "8f5799dc2ca85d9cdb0875d8078f01b011caddcc1f4b6c425edd7d015fd64f76"
+  },
+  "study18.md": {
+    "project/app/Services/DocumentAi.php": "2f4079e09b930283504136311aefa8454782890593aba0f9789e8fa8af13ebf7",
+    "project/app/Http/Controllers/Api/DocumentController.php": "4882615f96262f6d8ac7df61726a3af33bc6e124b36bcd953efba07768eddd7b",
+    "project/app/Mcp/Servers/LibraryServer.php": "48e2ae2377819f16fe5d9f1f1913da52cbb73b46f1cd946aab87f81ef22c963a",
+    "project/app/Mcp/Tools/ReadDocument.php": "7109f9cdaf67a61b294e968700ada4a566ca20c4bbce92f71b7f0d34f8ddd7be",
+    "project/routes/ai.php": "a1ae60cfcbb5f3529d8ccaa53a977fded354b96291e1ebdb9062600ffc0808d3",
+    "project/app/Console/Commands/McpRead.php": "cabbbebf2db93586902948843459916b828059817238c0dd0841011d1575773f"
+  },
+  "studyFinal.md": {
+    "project/routes/api.php": "e2469de22dccc0de27502cf43dfe5de78e6cefdb47ba712c5062ade2e5d5b2be",
+    "project/app/Models/Note.php": "d0f7ae488620442fc9bc5aab0f51b385729d081f015a5d2d524b97a5c0cd977f",
+    "project/app/Http/Controllers/Api/ContractController.php": "b404a30f2fd99f26b00ddc42e75185ccc4c0fa7917d7943ae145b5e66fa093d3",
+    "project/app/Jobs/SummarizeDocument.php": "95a6c32173a7aa57b3b74c534b6c07180d0ff3ebfde0b96e2c18e8c2d6f0acac",
+    "compose.production.yaml": "7279c708fbb9654c179475ddb60ce762d0f2a389b8c7a815e8a6e448ff6131aa"
+  }
+}
