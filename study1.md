@@ -1,154 +1,146 @@
-# study1. 만드는 방법 및 명령어, 실습1
+# study1 · Hello World와 기본 문법
 
-study0의 지도를 실제 폴더로 만듭니다. Laravel 앱은 `demo/`에 두고, 나중 화면용 JavaScript와 TypeScript는 `js/`, `ts/`에서 따로 실행합니다.
+학습 기준: [Laravel 노션](https://app.notion.com/p/3fdd7dec5e2e81299ce9e33e7ba75edf) · 단일 구성: Laravel + Vue · [전체 순서](README.md)
 
-이번 실습의 끝 상태는 주소 `/`에 Blade 환영 화면이 나오고, `/up`이 200을 주는 것입니다.
+이 저장소는 완성된 학습 소스를 제공한다. 기초는 `demo/`, 심화는 `project/`에서 실행한다. 단계별 파일은 기존 study 문서를 덮어써 갱신했으며, 아래 소스는 현재 저장소의 실제 전문이다. 처음부터 만들 때는 해당 경로의 파일과 앞 단계의 준비를 함께 적용한다.
 
-## 1. 개발 환경
+## ① 목표 한 줄
 
-이 저장소를 확인한 환경은 아래와 같습니다.
+라우트에서 Blade로 데이터를 전달하고 첫 화면을 렌더링한다.
 
-| 도구 | 버전 |
-|---|---|
-| PHP | 8.4.25 (winget `PHP.PHP.8.4`, ZTS) |
-| Composer | 2.10.3 |
-| Laravel | Framework 13.38.0, 스켈레톤 `laravel/laravel` v13.11.0 |
-| Node.js | 24.14.0 (study10의 JS/TS 화면에서 사용) |
+## ② 📖 이론
 
-Windows에는 PHP가 기본으로 없습니다.
+요청은 `public/index.php → bootstrap/app.php → 라우트 → 컨트롤러 → 뷰 → 응답`을 지난다. 식당에 비유하면 라우트는 메뉴 번호, 컨트롤러는 주문 담당자, Blade는 완성된 접시다. PHP 변수는 `$greeting`, 배열은 `['라우트', 'Blade']`, 객체 접근은 `->`를 쓴다. `return`은 결과를 호출자에게 돌려준다.
 
-```powershell
-winget install --id PHP.PHP.8.4 -e
-php -v
-```
+Blade의 `{{ $greeting }}`은 HTML을 이스케이프한다. `@foreach`는 반복, `$loop->iteration`은 1부터 시작하는 순서, `@if`는 조건이다. `@extends`는 공통 레이아웃을 선택하고 `@section`은 채울 부분을 지정한다. Vue의 `{{ value }}`는 브라우저 반응형 상태를 출력한다. Blade와 Vue 템플릿은 각각 `.blade.php`, `.vue`로 분리해 같은 중괄호를 서로 해석하지 않게 한다.
 
-설치 직후 터미널이 `php`를 못 찾으면 터미널을 다시 엽니다. winget 빌드는 `php.ini` 없이 `php.ini-development`만 둡니다. Laravel과 Composer는 `openssl`, `mbstring`, `fileinfo`, `curl`, `pdo_sqlite`, `sqlite3`, `zip`이 필요합니다. `php.ini-development`를 `php.ini`로 복사한 뒤 `extension_dir = "ext"`와 위 확장을 켜고, `date.timezone = Asia/Seoul`을 적습니다.
+## ③ 🛠️ 실기 · 전체 코드와 줄별 설명
 
-Composer는 winget에 패키지가 없어서 공식 설치 스크립트로 받았습니다.
+1. `demo`에서 서버를 실행하고 `/`를 연다. `Hello Laravel`과 기본 단위 목록이 보이는지 확인한다.
+2. `HomeController`의 greeting 문자열을 바꾸고 저장한다. Blade를 감시하는 Vite 개발 서버가 실행 중이면 브라우저가 새로고침된다. PHP 클래스의 동작 자체는 다음 요청에서 반영된다.
+3. 아래 전체 컨트롤러와 뷰를 짝으로 읽는다. 값의 이름을 바꾸면 전달 배열의 키와 뷰의 변수도 함께 바꿔야 한다.
+4. 개발자도구 Network에서 문서 응답 200과 HTML 본문을 확인하고 Console에서 Vite 연결 오류를 확인한다. Elements의 HTML은 서버가 만든 결과다.
+
+### 실행 명령
 
 ```powershell
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php composer-setup.php --install-dir="$env:LOCALAPPDATA\Composer" --filename=composer.phar
-php -r "unlink('composer-setup.php');"
-composer -V
-```
-
-`php.ini`를 만들기 전에 Composer를 돌리면 `openssl` 확장이 없다는 오류가 납니다. 확장을 켠 뒤에 설치합니다.
-
-## 2. 프로젝트 생성 명령어
-
-저장소 루트에서 `demo` 폴더로 앱을 만들었습니다. SQLite가 기본입니다. Node 의존성은 아직 설치하지 않습니다. 화면 CSS는 `public/css/app.css`에 두어, Vite 없이 Blade만으로 확인하게 했습니다. `package.json`과 `vite.config.js`는 스켈레톤 그대로 남아 있습니다.
-
-```powershell
-composer create-project laravel/laravel demo --no-interaction
-```
-
-생성 직후 Composer가 `.env`를 복사하고, `APP_KEY`를 만들고, `database/database.sqlite`를 만든 다음 기본 마이그레이션을 실행합니다. 사용자, 세션, 캐시, 잡 테이블이 생깁니다.
-
-`composer create-project`가 `demo/.git`을 만들면 지웁니다. 이 저장소의 Git 루트는 Laravel 폴더입니다.
-
-자주 여는 파일은 세 개입니다.
-
-- `composer.json`: PHP `^8.3`, `laravel/framework` `^13.17`
-- `bootstrap/app.php`: 웹 라우트와 `/up` 헬스 체크를 등록
-- `routes/web.php`: URL과 컨트롤러를 연결
-
-`.env`, SQLite 파일, `vendor/`는 Git에 올리지 않습니다. 클론한 뒤에는 `demo/`에서 아래를 실행합니다.
-
-```powershell
-composer install
-copy .env.example .env
-php artisan key:generate
-php artisan migrate
-```
-
-## 3. 자주 쓰는 명령어
-
-모두 `demo/` 안에서 실행합니다.
-
-```powershell
+cd demo
 php artisan serve --host=127.0.0.1 --port=8000
-php artisan route:list
-php artisan test
-php artisan migrate
-php artisan tinker
-php artisan make:model Post -mcr
+# 별도 터미널에서 cd demo 후 npm run dev
+curl.exe -i http://127.0.0.1:8000/
 ```
 
-`make:model`의 `-m`은 마이그레이션, `-c`는 컨트롤러, `-r`은 리소스 액션입니다. study2와 study3에서 이 생성기 결과를 손으로 읽습니다. 서버를 끈 뒤 개발 DB를 비우고 싶으면 `php artisan migrate:fresh`를 씁니다. 개발용 데이터가 사라집니다.
+명령은 위에서 아래로 실행한다. `cd`는 작업 폴더 이동, `php artisan`은 Laravel 작업, `composer`는 PHP 의존성, `npm`은 Vue 자산 도구, `docker compose`는 연결 서비스를 담당한다. 주석에 별도 터미널·운영 환경·선택 실습이 지정되어 있으면 그 경계를 유지한다.
 
-Laravel 13의 `route:list`에는 `--columns` 옵션이 없습니다. 컬럼을 고르려면 `--columns` 대신 그대로 `php artisan route:list`를 실행합니다.
+### `demo/app/Http/Controllers/HomeController.php` 전체 코드
 
-## 4. 설정에서 먼저 바꾼 것
-
-`config/app.php`의 시간대를 서울로 고정했습니다. 로캘은 `.env`가 읽습니다.
+[demo/app/Http/Controllers/HomeController.php](demo/app/Http/Controllers/HomeController.php)를 해당 경로에 둔다. 아래 블록에는 생략된 코드가 없다.
 
 ```php
-'timezone' => 'Asia/Seoul',
-```
+<?php
 
-`.env.example`은 다음 값입니다. 실제 `.env`도 같게 맞추되 `APP_KEY`는 생성기가 만든 값을 유지합니다.
+namespace App\Http\Controllers;
 
-```
-APP_NAME=LaravelStudy
-APP_URL=http://127.0.0.1:8000
-APP_LOCALE=ko
-APP_FALLBACK_LOCALE=en
-APP_FAKER_LOCALE=ko_KR
-```
-
-번역 파일이 없는 키는 영어 또는 키 이름 그대로 떨어집니다. 화면 문장은 Blade에 한국어로 적습니다. Django의 `TIME_ZONE`, `LANGUAGE_CODE`와 같은 자리입니다.
-
-`php artisan tinker --execute`로 확인한 값은 `Asia/Seoul ko LaravelStudy`입니다.
-
-## 5. 실습1: 첫 화면
-
-라우트 한 줄이 컨트롤러 액션을 고릅니다. 헬스 체크 `/up`은 `bootstrap/app.php`의 `health: '/up'`이 이미 등록합니다.
-
-```php
-Route::get('/', [HomeController::class, 'index'])->name('home');
-```
-
-```php
 class HomeController extends Controller
 {
     public function index()
     {
-        return view('home');
+        return view('home', ['greeting' => 'Hello Laravel', 'topics' => ['라우트', '컨트롤러', 'Blade']]);
     }
 }
 ```
 
-`view('home')`은 `resources/views/home.blade.php`를 찾습니다. 레이아웃은 `layouts/app.blade.php`이고, 스타일은 `public/css/app.css`입니다. `{{ }}`는 이스케이프된 출력입니다.
+#### 줄별 설명
 
-스켈레톤의 `resources/views/welcome.blade.php`와 `tests/Feature/ExampleTest.php`는 이 라우트로 바꿔 제거했습니다.
+| 줄 | 설명 |
+|---:|---|
+| 1 | PHP 코드 시작을 선언한다. |
+| 2 | 가독성을 위한 빈 줄이며 실행 동작은 없다. |
+| 3 | 이 클래스가 속한 이름 공간을 지정해 같은 이름의 충돌을 막는다. |
+| 4 | 가독성을 위한 빈 줄이며 실행 동작은 없다. |
+| 5 | 앞서 선언한 처리의 연속 구문이다. 같은 함수·설정 블록의 입력과 결과에 연결된다. |
+| 6 | 현재 선언·조건·설정의 내부 블록을 연다. |
+| 7 | `index` 메서드를 선언한다. 목록을 조회해 응답으로 반환하는 진입점이다. |
+| 8 | 현재 선언·조건·설정의 내부 블록을 연다. |
+| 9 | 명명한 Blade 뷰에 배열 값을 전달해 HTML을 렌더링한다. |
+| 10 | 현재 블록·배열·호출을 닫고 상위 흐름으로 돌아간다. |
+| 11 | 현재 블록·배열·호출을 닫고 상위 흐름으로 돌아간다. |
 
-## 6. 검증
 
-`demo/`에서 `php artisan test --filter=HomeTest` 결과입니다.
+### `demo/resources/views/home.blade.php` 전체 코드
 
+[demo/resources/views/home.blade.php](demo/resources/views/home.blade.php)를 해당 경로에 둔다. 아래 블록에는 생략된 코드가 없다.
+
+```blade
+@extends('layouts.app')
+
+@section('title', '첫 화면')
+
+@section('content')
+    <section class="hero">
+        <p class="eyebrow">study1 · Blade</p>
+        <p>{{ $greeting }}</p>
+        <ul>@foreach ($topics as $topic)<li>{{ $loop->iteration }}. {{ $topic }}</li>@endforeach</ul>
+        <p><a href="{{ route('workspace') }}">Vue 게시판 열기</a></p>
+        <h1>Laravel 게시판을 이 폴더에서 만듭니다.</h1>
+        <p>라우트 <code>home</code>이 <code>HomeController</code>의 <code>index</code>를 고르고, 액션은 이 Blade를 반환합니다. 시간대는 <code>Asia/Seoul</code>, 로캘은 <code>ko</code>입니다.</p>
+        <p>프레임워크 헬스 체크는 <a href="{{ url('/up') }}">/up</a> 입니다.</p>
+    </section>
+@endsection
 ```
-PASS  Tests\Feature\HomeTest
-✓ home renders the blade intro
-✓ health check is ok
 
-Tests: 2 passed (4 assertions)
-```
+#### 줄별 설명
 
-서버를 띄운 뒤 HTTP로 확인했습니다.
+| 줄 | 설명 |
+|---:|---|
+| 1 | 공통 Blade 레이아웃을 부모로 선택한다. |
+| 2 | 가독성을 위한 빈 줄이며 실행 동작은 없다. |
+| 3 | 레이아웃의 지정 영역에 이 뷰 내용을 채운다. |
+| 4 | 가독성을 위한 빈 줄이며 실행 동작은 없다. |
+| 5 | 레이아웃의 지정 영역에 이 뷰 내용을 채운다. |
+| 6 | 화면 요소·접근성 속성·텍스트 영역을 선언한다. 중괄호 출력은 기본 이스케이프한다. |
+| 7 | 화면 요소·접근성 속성·텍스트 영역을 선언한다. 중괄호 출력은 기본 이스케이프한다. |
+| 8 | 화면 요소·접근성 속성·텍스트 영역을 선언한다. 중괄호 출력은 기본 이스케이프한다. |
+| 9 | 서버에서 전달받은 목록을 반복해 이스케이프한 HTML을 만든다. |
+| 10 | 화면 요소·접근성 속성·텍스트 영역을 선언한다. 중괄호 출력은 기본 이스케이프한다. |
+| 11 | 화면 요소·접근성 속성·텍스트 영역을 선언한다. 중괄호 출력은 기본 이스케이프한다. |
+| 12 | 화면 요소·접근성 속성·텍스트 영역을 선언한다. 중괄호 출력은 기본 이스케이프한다. |
+| 13 | 화면 요소·접근성 속성·텍스트 영역을 선언한다. 중괄호 출력은 기본 이스케이프한다. |
+| 14 | 화면 요소·접근성 속성·텍스트 영역을 선언한다. 중괄호 출력은 기본 이스케이프한다. |
+| 15 | 앞서 선언한 처리의 연속 구문이다. 같은 함수·설정 블록의 입력과 결과에 연결된다. |
 
-```powershell
-php artisan serve --host=127.0.0.1 --port=8000
-```
 
-| 주소 | 결과 |
-|---|---|
-| `GET /` | 200. 본문에 "Laravel 게시판을 이 폴더에서 만듭니다." |
-| `GET /up` | 200. 제목이 `LaravelStudy`, 본문에 Application up |
-| `GET /css/app.css` | 200 |
+## ④ 🔗 연동 포인트
 
-`php artisan route:list`에는 `GET /` 이름 `home`, 액션 `HomeController@index`가 보입니다. `/up`은 프레임워크 헬스 라우트라 이 목록의 앱 라우트 한 줄과는 따로 등록되어 있고, 테스트와 HTTP 모두 200입니다.
+컨트롤러가 전달하는 배열은 다음 단계 MVC의 데이터 계약이다. `/app` 링크는 같은 Laravel이 제공하는 Vue 화면으로 이동한다. Vite의 자산 주소와 API 주소는 다르며 API 상대 경로 `/api/posts`는 PHP 서버를 가리킨다.
 
-브라우저 자동화 도구는 이 환경에 연결되지 않았습니다. 화면 확인은 Feature 테스트와 HTTP 응답으로 했습니다.
+## ⑤ 오류 노트
 
-다음 문서는 [study2.md](study2.md)입니다. `posts` 테이블과 `Post` 모델을 만듭니다.
+| 증상 | 원인 | 해결 |
+|---|---|---|
+| Undefined variable | 뷰에 전달한 키와 변수명이 다름 | 컨트롤러 배열의 greeting/topics 키 확인 |
+| 변경해도 화면 유지 | 개발 서버 미실행 또는 오래된 빌드 | npm run dev 실행; 배포에서는 npm run build |
+| View not found | 뷰 경로와 점 표기 불일치 | home은 resources/views/home.blade.php인지 확인 |
+
+## ⑥ 직접 해보기
+
+1. topics에 새로운 핵심 용어를 하나 추가한다.
+2. greeting에 <b>안녕</b>를 넣어 태그가 실행되지 않는 것을 확인한다.
+
+## ⑦ ☐ 체크리스트
+
+학습자가 직접 실행·설명한 뒤 체크한다. 코드 준비 완료와 외부 서비스 실행 검증은 다르다.
+
+- [ ] 첫 화면에서 Hello Laravel을 확인했다.
+- [ ] Blade 변수·반복·레이아웃을 설명할 수 있다.
+- [ ] Network의 200과 Console을 확인했다.
+
+## ⑧ 다음 단계 연결
+
+라우트에서 Blade로 데이터를 전달하고 첫 화면을 렌더링한다. 이 결과를 [study2.md](study2.md)에서 다음 실습과 연결한다.
+
+### 근거·참고
+
+[공통 API 스펙 v1](https://app.notion.com/p/3d6d7dec5e2e8139adbfd36dd506c65e) · [요구사항 매핑](docs/notion-coverage.md) · [검증 기록](docs/verification.md)
+
+- [공식 문서 1](https://laravel.com/docs/13.x/blade)
