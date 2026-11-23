@@ -1,0 +1,37 @@
+name: laravel-study-data
+services:
+  postgres:
+    image: postgres:17-alpine
+    profiles: [postgres]
+    environment:
+      POSTGRES_DB: study
+      POSTGRES_USER: study
+      POSTGRES_PASSWORD: ${STUDY_DB_PASSWORD:-local-study-only}
+    ports: ["127.0.0.1:54329:5432"]
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U study -d study"]
+      interval: 5s
+      retries: 10
+  mariadb:
+    image: mariadb:11.8
+    profiles: [mariadb]
+    environment:
+      MARIADB_DATABASE: study
+      MARIADB_USER: study
+      MARIADB_PASSWORD: ${STUDY_DB_PASSWORD:-local-study-only}
+      MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+    ports: ["127.0.0.1:33069:3306"]
+    volumes: ["mariadb-data:/var/lib/mysql"]
+  mongo:
+    image: mongo:8
+    profiles: [mongo]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: study
+      MONGO_INITDB_ROOT_PASSWORD: ${STUDY_DB_PASSWORD:-local-study-only}
+    ports: ["127.0.0.1:27019:27017"]
+    volumes: ["mongo-data:/data/db"]
+volumes:
+  postgres-data:
+  mariadb-data:
+  mongo-data:

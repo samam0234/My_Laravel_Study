@@ -7,10 +7,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(['title', 'body'])]
 class Note extends Model
 {
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -31,7 +37,7 @@ class Note extends Model
         $like = '%'.$term.'%';
 
         return $query->where(function (Builder $inner) use ($like) {
-            $inner->where('title', 'like', $like)->orWhere('body', 'like', $like);
+            $inner->whereLike('title', $like)->orWhereLike('body', $like);
         });
     }
 
@@ -47,7 +53,12 @@ class Note extends Model
 
     public function syncTagString(?string $raw): void
     {
-        $names = collect(preg_split('/[,，]/u', (string) $raw) ?: [])
+        $this->syncTagNames(preg_split('/[,，]/u', (string) $raw) ?: []);
+    }
+
+    public function syncTagNames(array $raw): void
+    {
+        $names = collect($raw)
             ->map(fn ($name) => trim((string) $name))
             ->filter(fn ($name) => $name !== '')
             ->unique()
