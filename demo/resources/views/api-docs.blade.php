@@ -1,0 +1,1 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laravel API v1</title>@vite('resources/js/docs.js')</head><body><div id="api-docs"></div></body></html>

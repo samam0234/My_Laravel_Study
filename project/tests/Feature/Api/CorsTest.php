@@ -9,12 +9,12 @@ class CorsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_the_project_js_origin_is_allowed(): void
+    public function test_the_configured_vue_origin_is_allowed(): void
     {
-        $this->withHeader('Origin', 'http://127.0.0.1:5180')
+        $this->withHeader('Origin', 'http://127.0.0.1:5173')
             ->getJson('/api/v1/notes')
             ->assertOk()
-            ->assertHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5180');
+            ->assertHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:5173');
     }
 
     public function test_a_random_origin_is_not_echoed(): void
